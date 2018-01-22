@@ -1,0 +1,110 @@
+NOTE:: Check for the Hardware lock in the SD card adapter. if it is lock one cannot perform write operation on it
+-----------------------------------------------------------------------------------------------------------------
+Step1: Insert SD card on the laptop using SD card adapter.
+
+Step2: Run "lsblk" on terminal to check the device name and path.
+
+Step3: First Unmount the device 
+
+Step4: Run lsblk again on terminal.
+ 	memory card will have a name. For eg. mmcblk0/1, sdb,sdc ..etc.
+
+Step5: after inserting the card, it is not mounted follow these steps:
+	Step1: insert card
+	Step2: open terminal and run sudo fdisk -l
+	Step3: Check the name of SD card[Eg: /dev/mmcblk0, /dev/sdb/ /dev/sdc]
+	Step4: mkdir /mnt/SD
+	Step5: mount /dev/sdc1 /mnt/SD
+	Step6: if step5 gives error; try mount -t ext3 /dev/sdc1 /mnt/SD
+
+Step6: sudo fdsik <path of the sd card>  #Not the partition path
+	E.g.     /dev/mmcblk0 -> path of the whole SD card.
+     		/dev/mmcblk0p1 or /dev/mmcblk0p2 -> path of the SD card partition p1 and p2.
+     		instead of mmcblk0 it can be sdb or sdc.
+
+Step7:Commands:
+	m for help
+	p for list for patition
+	d for deleting the partitions.
+	u for changning the units from sectors to cyclinder.
+	n for creating the new partiton.
+	t for creating the type of filesystem partition.
+
+Step8: Delete all partitions using the following commands
+	Command (m for help): d
+
+Step9: Give the partition number you want to delete 1/2.
+
+Step10: Press 'u' to change the unit to cylinder.
+	Command (m for help): u
+Step11:	Creating new partitions: Press n
+	Command (m for help): n
+	[ Command action
+	  e extended
+	  p primary partition (1-4) ]
+
+Step12: Press p to create a primary partition. enter the following values
+	p
+	Give partition number:Partition number (1-4): 1
+	First cylinder (1-1038, default 1): Press Enter
+	Last cylinder, +cylinders or +size{K,M,G} (1-1038, default 1038): +100M 
+
+Step13: Press p to create a primary partition. enter the following values
+	p
+	Give partition number:Partition number (1-4): 1
+	First cylinder (1-1038, default 1): Press Enter
+	Last cylinder, +cylinders or +size{K,M,G} (1-1038, default 1038): Press Enter 
+
+Step14: Assign file system to created partitions. Partition 1 as FAT16 and partition 2 as LINUX.
+	Command (m for help): t
+	Partition number (1-4): 1
+	Hex code (type L to list codes): 6
+	Changed system type of partition 1 to 6 (FAT16)
+	Command (m for help): t
+	Partition number (1-4): 2
+	Hex code (type L to list codes): 83
+
+Step15: Press p to list all the partition
+
+Step16: Now the partitions are created as above. Save these changes by pressing 'w'.
+	Command (m for help): w
+
+Step17: Again make sure both the partitions are unmounted.
+	umount <path of the first partition> 
+	umount <path of second partition>
+
+Step18: Now format both the partitions. Partition 1 as VFAT (windows) partition and 2nd partition as EXT3 (Linux).
+	sudo mkfs.vfat /dev/sdb1
+	sudo mkfs.ext3 /dev/sdb2
+ 	Now SD card is ready to use.
+	Remove the SD card and insert again then the respective partitions can be viewed by the below command.
+	mount
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
